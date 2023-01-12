@@ -1,86 +1,24 @@
-// for integration of f(x) from a to b.
 #include <stdio.h>
-#include <conio.h>
 #include <math.h>
-void GaussLegendre(float, float, int);
 
-float f(float x) { return (exp(x)); }
-
-float g(float a, float b, float z)
+double f(double x)
 {
-    float x = (b - a) / 2 * z + (b + a) / 2;
-    return (exp(x));
+    // replace this function with the function you want to integrate
+    return x * x;
 }
 
-void main()
+double gaussian_2point(double a, double b)
 {
-    float a, b;
-    int n;
-    printf("Enter a and b: ");
-    scanf("%f%f", &a, &b);
-INPUT:
-    printf("Enter 2 for 2-point formula: \n");
-    printf("Enter 3 for 3-point formula: \n");
-    printf("Enter 4 for 4-point formula: \n");
-    scanf("%d", &n);
-    switch (n)
-    {
-    case 2:
-        printf("Using 2-point Formula::\n");
-        GaussLegendre(a, b, n);
-        break;
-    case 3:
-        printf("Using 3-point Formula::\n");
-        GaussLegendre(a, b, n);
-        break;
-    case 4:
-        printf("Using 4-point Formula::\n");
-        GaussLegendre(a, b, n);
-        break;
-    default:
-        printf("INVALID\n");
-        goto INPUT;
-    }
-    getch();
+    double x1 = -sqrt(3) / 3, x2 = sqrt(3) / 3;
+    double f1 = f((b + a) / 2 + x1 * (b - a) / 2), f2 = f((b + a) / 2 + x2 * (b - a) / 2);
+    return (b - a) * (f1 + f2) / 2;
 }
 
-void GaussLegendre(float a, float b, int n)
+int main()
 {
-    float I;
-    if (a == -1 && b == 1)
-    {
-        if (n == 2)
-        {
-            I = 1 * f(-1 / sqrt(3)) + 1 * f(1 / sqrt(3));
-            printf("I=%f", I);
-        }
-        if (n == 3)
-        {
-            I = 5 / 9 * f(-sqrt(3 / 5)) + 8 / 9 * f(0) + 5 / 9 * f(sqrt(3 / 5));
-            printf("I=%f", I);
-        }
-        if (n == 4)
-        {
-            I = 0.34785 * f(-0.86114) + 0.65215 * f(-0.33998) + 0.65215 * f(0.33998) + 0.34785 * f(0.86114);
-            printf("I=%f", I);
-        }
-    }
-    else
-    {
-        if (n == 2)
-        {
-            I = (b - a) / 2 * (1 * g(a, b, -1 / sqrt(3)) + 1 * g(a, b, 1 / sqrt(3)));
-            printf("I=%f", I);
-        }
-        if (n == 3)
-        {
-            I = (b - a) / 2 * (5 / 9 * g(a, b, -sqrt(3 / 5)) + 8 / 9 * g(a, b, 0) + 5 / 9 * g(a, b, sqrt(3 / 5)));
-            printf("I=%f", I);
-        }
-        if (n == 4)
-        {
-            I = (b - a) / 2 * (0.34785 * g(a, b, -0.86114) + 0.65215 * g(a, b, -0.33998) + 0.65215 * g(a, b, 0.33998) + 0.34785 * g(a, b, 0.86114));
-            printf("I=%f", I);
-        }
-    }
+    double a, b;
+    printf("Enter the limits of integration (a b): ");
+    scanf("%lf %lf", &a, &b);
+    printf("Integration of function from %lf to %lf is: %lf", a, b, gaussian_2point(a, b));
+    return 0;
 }
